@@ -65,17 +65,22 @@ const client = window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_K
 // Detectar el enlace de recuperación ANTES de que Supabase procese la URL.
 const initialAuthHash = new URLSearchParams(location.hash.replace(/^#/,''));
 const initialAuthQuery = new URLSearchParams(location.search);
-const hasRecoveryReturn = initialAuthHash.get('type')==='recovery' || initialAuthQuery.get('type')==='recovery';
+const hasRecoveryReturn = initialAuthHash.get('type')==='recovery' || initialAuthQuery.get('type')==='recovery' || Boolean(initialAuthQuery.get('code'));
 const recoveryLinkError = initialAuthHash.get('error_description') || initialAuthQuery.get('error_description') || '';
 let recoveryMode = hasRecoveryReturn;
 let recoveryDialogShown = false;
 let resumeDayAfterLogin=false;
 const mobileSharePreferred=()=>window.matchMedia('(max-width:760px)').matches && (navigator.maxTouchPoints>0 || 'ontouchstart' in window);
 const photoActionLabel=()=>mobileSharePreferred()?icon('share')+' Compartir foto':icon('camera')+' Sacar foto';
-// El alias público es fijo; Supabase sigue validando la contraseña real.
+// El usuario se escribe manualmente. El alias no es sensible a mayúsculas/minúsculas;
+// la contraseña SIEMPRE se comprueba con Supabase Auth y nunca se expone en el código.
 const LOGIN_ALIAS = 'botto';
-async function resolveAdminEmail(){
-  const response=await client.rpc('calendar_resolve_login',{p_username:LOGIN_ALIAS});
+const normalizeUsername = value=>String(value??'').trim().toLocaleLowerCase('es-AR');
+async function resolveAdminEmail(username){
+  if(normalizeUsername(username)!==LOGIN_ALIAS){
+    throw new Error('Usuario o contraseña incorrectos.');
+  }
+  const response=await client.rpc('calendar_resolve_login',{p_username:normalizeUsername(username)});
   if(response.error){
     const detail=response.error.code==='PGRST202'?'Falta activar la vinculación del usuario en Supabase. Ejecutá el archivo SQL incluido.':response.error.message;
     throw new Error('No se pudo localizar la cuenta administrativa. '+detail);
@@ -235,13 +240,13 @@ function templateEditor(tid=''){if(!admin())return showLogin();const t=db.templa
 function accountEditor(){notify('Administrá cuentas en Supabase → Authentication → Users.','error');}
 function showLogin(){
   if(recoveryMode)return showNewPasswordForm();
-  openModal('Acceso administrativo','Una sola cuenta para el equipo del hogar.',`<form id="login-form"><div class="account-alias"><span class="account-icon">${icon('shield')}</span><span><small>Cuenta</small><strong>${LOGIN_ALIAS}</strong></span></div><div class="form-field">${field('Contraseña','password','password','','required autocomplete="current-password" autofocus')}</div><div class="password-help-link"><button type="button" class="text-button" data-action="forgot-password">¿Olvidaste tu contraseña?</button></div><div class="modal-actions">${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">Ingresar</button></div></form>`);
+  openModal('Acceso administrativo','Ingresá tu usuario y contraseña.',`<form id="login-form"><div class="form-field">${field('Usuario','username','text','','required maxlength="40" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Escribí tu usuario" autofocus')}</div><div class="form-field auth-password-field">${field('Contraseña','password','password','','required autocomplete="current-password" placeholder="Escribí tu contraseña"')}</div><p class="auth-error" id="login-error" role="alert" hidden></p><div class="password-help-link"><button type="button" class="text-button" data-action="forgot-password">¿Olvidaste tu contraseña?</button></div><div class="modal-actions">${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">Ingresar</button></div></form>`);
 }
 function showForgotPassword(){
-  openModal('Recuperar contraseña','Cuenta de administración: botto',`<form id="forgot-form"><div class="reset-confirmation">${icon('information')}<strong>Vamos a enviar un enlace al correo vinculado a la cuenta del hogar.</strong><p>No necesitás saber el correo ni escribirlo aquí. La persona responsable de ese buzón debe abrir el mensaje y crear la contraseña nueva.</p></div><p class="form-help message-large">Al cambiar la clave, avisales a los otros administradores: todos utilizan la misma cuenta.</p><div class="modal-actions">${btn('Volver','login')}<button type="submit" class="btn primary">Enviar correo de recuperación</button></div></form>`);
+  openModal('Recuperar contraseña','Escribí tu usuario para solicitar el correo de recuperación.',`<form id="forgot-form"><div class="form-field">${field('Usuario','username','text','','required maxlength="40" autocomplete="username" autocapitalize="none" spellcheck="false" placeholder="Escribí tu usuario" autofocus')}</div><div class="reset-confirmation auth-recovery-note">${icon('information')}<strong>Te enviaremos un enlace al correo asociado a la cuenta.</strong><p>El enlace no cambia la contraseña por sí solo. Después de abrirlo tendrás que escribir una nueva contraseña y presionar «Guardar contraseña».</p></div><p class="form-help message-large">Si el correo está en manos de otra administradora, pedile que revise su bandeja y Spam.</p><div class="modal-actions">${btn('Volver','login')}<button type="submit" class="btn primary">Enviar enlace</button></div></form>`);
 }
 function showNewPasswordForm(){
-  openModal('Crear nueva contraseña','Confirmá la nueva contraseña para recuperar el acceso.',`<form id="recovery-form"><div class="form-field">${field('Nueva contraseña','password','password','','required minlength="8" autocomplete="new-password"')}</div><div class="form-field" style="margin-top:15px">${field('Repetir contraseña','confirmPassword','password','','required minlength="8" autocomplete="new-password"')}</div><p class="form-help">Usá al menos 8 caracteres. Después de guardarla tendrás que volver a iniciar sesión.</p><div class="modal-actions">${btn('Cancelar','cancel-recovery')}<button type="submit" class="btn primary">Guardar contraseña</button></div></form>`);
+  openModal('Restablecer contraseña','Llegaste desde el correo de recuperación. Elegí y confirmá una contraseña nueva.',`<form id="recovery-form"><div class="form-field">${field('Nueva contraseña','password','password','','required minlength="8" autocomplete="new-password"')}</div><div class="form-field" style="margin-top:15px">${field('Repetir contraseña','confirmPassword','password','','required minlength="8" autocomplete="new-password"')}</div><p class="form-help">Usá al menos 8 caracteres. Después de guardarla tendrás que volver a iniciar sesión.</p><div class="modal-actions">${btn('Cancelar','cancel-recovery')}<button type="submit" class="btn primary">Guardar contraseña</button></div></form>`);
 }
 function showChangePassword(){
   if(!admin())return showLogin();
@@ -353,10 +358,12 @@ async function saveTemplate(form){
 }
 function saveAccount(){notify('Los usuarios se administran desde Supabase Auth.','error');}
 async function loginSubmit(form){
+  const username=formVal(form,'username');
   const password=formVal(form,'password');
-  if(!password||!guardBusy())return;
+  if(!username||!password){showLoginError('Completá el usuario y la contraseña.');return;}
+  if(!guardBusy())return;
   try{
-    const email=await resolveAdminEmail();
+    const email=await resolveAdminEmail(username);
     const {data,error}=await client.auth.signInWithPassword({email,password});
     if(error)throw error;
     const roleResponse=await client.from('calendar_admins').select('role').eq('user_id',data.user.id).maybeSingle();
@@ -366,17 +373,29 @@ async function loginSubmit(form){
     session={id:data.user.id,username:'botto',role:'admin'};closeModal();tab='calendar';await loadRemote({silent:true});
     if(resumeDayAfterLogin){resumeDayAfterLogin=false;dayModal(selectedDate);}
     notify('Administrador conectado a Supabase.');
-  }catch(err){notify('No se pudo ingresar: '+readClientError(err),'error');}
+  }catch(err){
+    const invalid=normalizeUsername(username)!==LOGIN_ALIAS || /invalid login credentials|invalid credentials/i.test(String(err?.message||''));
+    showLoginError(invalid
+      ? 'Usuario o contraseña incorrectos. Si solicitaste recuperar tu contraseña, primero abrí el enlace del correo y guardá una nueva.'
+      : 'No se pudo ingresar. '+readClientError(err));
+  }
   finally{requestBusy=false;}
 }
+function showLoginError(message){
+  const target=$('#login-error');
+  if(target){target.textContent=message;target.hidden=false;}
+  else notify(message,'error');
+}
 async function forgotSubmit(form){
+  const username=formVal(form,'username');
+  if(!username)return notify('Escribí tu usuario.','error');
   if(!guardBusy())return;
   try{
-    const email=await resolveAdminEmail();
+    const email=await resolveAdminEmail(username);
     const {error}=await client.auth.resetPasswordForEmail(email,{redirectTo:resetRedirectURL()});
     if(error)throw error;
-    openModal('Revisá tu correo','Solicitud enviada',`<div class="reset-confirmation">${icon('check')}<strong>Enviamos la solicitud al correo de administración del hogar.</strong><p>Revisá la bandeja de entrada y Spam. Si no sos quien administra ese correo, pedile a la persona responsable que revise el mensaje. Desde el enlace podrán crear la contraseña nueva.</p></div><div class="modal-actions">${btn('Volver al ingreso','login','primary')}</div>`);
-  }catch(err){notify('No se pudo enviar el enlace: '+readClientError(err),'error');}
+    openModal('Revisá el correo','Enlace de recuperación solicitado',`<div class="reset-confirmation">${icon('check')}<strong>Solicitud enviada al correo vinculado al usuario.</strong><p>Revisá la bandeja y Spam. Abrí el enlace recibido, escribí dos veces una contraseña nueva y presioná «Guardar contraseña».</p><p>Hasta completar esos pasos, la contraseña anterior no cambia.</p></div><div class="modal-actions">${btn('Volver al ingreso','login','primary')}</div>`);
+  }catch(err){const invalid=normalizeUsername(username)!==LOGIN_ALIAS;notify(invalid?'Revisá el nombre de usuario.':'No se pudo enviar el enlace: '+readClientError(err),'error');}
   finally{requestBusy=false;}
 }
 function validNewPasswords(form){

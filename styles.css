@@ -91,3 +91,10 @@ h1{font-size:clamp(23px,2.35vw,33px);font-weight:825;letter-spacing:-1px;line-he
 .account-alias strong{font-size:19px;letter-spacing:.01em;color:var(--ink)}
 #login-form .form-control{min-height:48px;font-size:16px}
 #login-form .modal-actions .btn,#forgot-form .modal-actions .btn{min-height:44px}
+
+/* Acceso manual: nombre de usuario y contraseña, accesibles también en celular. */
+#login-form .auth-password-field{margin-top:18px}
+#login-form .auth-error{border:1px solid #e6acb4;background:#fff1f3;color:#8d2c49;padding:11px 13px;border-radius:9px;font-size:13px;line-height:1.45;margin:12px 0 0;font-weight:650}
+#login-form .auth-error[hidden]{display:none}
+#forgot-form .auth-recovery-note{margin-top:20px}
+#login-form input[name="username"],#forgot-form input[name="username"]{text-transform:none}
