@@ -68,3 +68,26 @@ h1{font-size:clamp(23px,2.35vw,33px);font-weight:825;letter-spacing:-1px;line-he
 .cloud-card{background:white;border:1px solid #eee3e8;border-radius:18px;padding:34px;max-width:520px;text-align:center;box-shadow:0 14px 38px #37253310;}
 .cloud-card h1{font-size:23px;margin:0 0 16px;}
 .cloud-card p{line-height:1.6;color:#6e6370;}
+
+
+/* Recuperación de acceso y foto fácil de compartir desde celulares */
+.password-help-link{display:flex;justify-content:flex-end;margin-top:10px}
+.text-button{border:0;background:none;color:var(--berry-dark);font-weight:750;font-size:12px;padding:8px 2px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.text-button:focus-visible{outline:2px solid var(--berry)}
+.message-large{font-size:13px;line-height:1.7;margin-top:14px}
+.reset-confirmation{display:grid;gap:10px;padding:12px 4px;color:var(--ink)}
+.reset-confirmation svg{width:30px;height:30px;color:var(--green)}
+.reset-confirmation p{font-size:12px;line-height:1.7;color:var(--muted)}
+.photo-preview-help{font-size:13px;background:#f9edf2;border:1px solid #edd6e0;padding:12px;border-radius:10px;line-height:1.6;margin-bottom:15px}
+.photo-preview-image{width:100%;max-height:57dvh;object-fit:contain;display:block;border-radius:11px;border:1px solid var(--line);background:#fff}
+@media(max-width:760px){.photo-preview-image{max-height:48dvh}.password-help-link .text-button{font-size:14px;min-height:44px}.reset-confirmation strong{line-height:1.5}}
+
+/* Inicio de sesión simplificado, pensado para personal no técnico. */
+.account-alias{display:flex;align-items:center;gap:12px;background:#faf5f7;border:1px solid #eedde5;border-radius:12px;padding:13px 15px;margin-bottom:20px}
+.account-alias .account-icon{height:42px;width:42px;display:grid;place-items:center;color:var(--accent);background:#f6e8ef;border-radius:11px;flex-shrink:0}
+.account-alias .account-icon svg{height:20px;width:20px}
+.account-alias span:last-child{display:grid;gap:3px}
+.account-alias small{font-size:12px;color:var(--muted)}
+.account-alias strong{font-size:19px;letter-spacing:.01em;color:var(--ink)}
+#login-form .form-control{min-height:48px;font-size:16px}
+#login-form .modal-actions .btn,#forgot-form .modal-actions .btn{min-height:44px}
