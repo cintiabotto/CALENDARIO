@@ -1,416 +1,6 @@
 'use strict';
-/* Casa Hogar Cintia Botto · Almanaque administrativo local
-   Compatible con la clave de almacenamiento de la versión anterior. */
-const STORAGE = 'cintia-botto-guardias-v3';
-const ACCOUNT_STORAGE = 'cintia-botto-guardias-users-v1';
-const SESSION = 'cintia-botto-guardias-session-v1';
-const SEED_ASSIGNMENTS = [
-  {
-    "id": "original-17-morning",
-    "date": "2026-10-17",
-    "templateId": "morning",
-    "staffId": "marisol",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-17-afternoon",
-    "date": "2026-10-17",
-    "templateId": "afternoon",
-    "staffId": "pochi",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-17-night",
-    "date": "2026-10-17",
-    "templateId": "night",
-    "staffId": "joha",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-18-morning",
-    "date": "2026-10-18",
-    "templateId": "morning",
-    "staffId": "pochi",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-18-afternoon",
-    "date": "2026-10-18",
-    "templateId": "afternoon",
-    "staffId": "joha",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-18-night",
-    "date": "2026-10-18",
-    "templateId": "night",
-    "staffId": "marisol",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-19-morning",
-    "date": "2026-10-19",
-    "templateId": "morning",
-    "staffId": "joha",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-19-afternoon",
-    "date": "2026-10-19",
-    "templateId": "afternoon",
-    "staffId": "marisol",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-19-night",
-    "date": "2026-10-19",
-    "templateId": "night",
-    "staffId": "pochi",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-20-morning",
-    "date": "2026-10-20",
-    "templateId": "morning",
-    "staffId": "marisol",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-20-afternoon",
-    "date": "2026-10-20",
-    "templateId": "afternoon",
-    "staffId": "pochi",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-20-night",
-    "date": "2026-10-20",
-    "templateId": "night",
-    "staffId": "joha",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-21-morning",
-    "date": "2026-10-21",
-    "templateId": "morning",
-    "staffId": "pochi",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-21-afternoon",
-    "date": "2026-10-21",
-    "templateId": "afternoon",
-    "staffId": "joha",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-21-night",
-    "date": "2026-10-21",
-    "templateId": "night",
-    "staffId": "marisol",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-22-morning",
-    "date": "2026-10-22",
-    "templateId": "morning",
-    "staffId": "joha",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-22-afternoon",
-    "date": "2026-10-22",
-    "templateId": "afternoon",
-    "staffId": "marisol",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-22-night",
-    "date": "2026-10-22",
-    "templateId": "night",
-    "staffId": "pochi",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-23-morning",
-    "date": "2026-10-23",
-    "templateId": "morning",
-    "staffId": "marisol",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-23-afternoon",
-    "date": "2026-10-23",
-    "templateId": "afternoon",
-    "staffId": "pochi",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-23-night",
-    "date": "2026-10-23",
-    "templateId": "night",
-    "staffId": "joha",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-24-morning",
-    "date": "2026-10-24",
-    "templateId": "morning",
-    "staffId": "pochi",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-24-afternoon",
-    "date": "2026-10-24",
-    "templateId": "afternoon",
-    "staffId": "joha",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-24-night",
-    "date": "2026-10-24",
-    "templateId": "night",
-    "staffId": "marisol",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-25-morning",
-    "date": "2026-10-25",
-    "templateId": "morning",
-    "staffId": "joha",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-25-afternoon",
-    "date": "2026-10-25",
-    "templateId": "afternoon",
-    "staffId": "marisol",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-25-night",
-    "date": "2026-10-25",
-    "templateId": "night",
-    "staffId": "pochi",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-26-morning",
-    "date": "2026-10-26",
-    "templateId": "morning",
-    "staffId": "marisol",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-26-afternoon",
-    "date": "2026-10-26",
-    "templateId": "afternoon",
-    "staffId": "pochi",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-26-night",
-    "date": "2026-10-26",
-    "templateId": "night",
-    "staffId": "joha",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-27-morning",
-    "date": "2026-10-27",
-    "templateId": "morning",
-    "staffId": "joha",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-27-afternoon",
-    "date": "2026-10-27",
-    "templateId": "afternoon",
-    "staffId": "pochi",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-27-night",
-    "date": "2026-10-27",
-    "templateId": "night",
-    "staffId": "marisol",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-28-morning",
-    "date": "2026-10-28",
-    "templateId": "morning",
-    "staffId": "joha",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-28-afternoon",
-    "date": "2026-10-28",
-    "templateId": "afternoon",
-    "staffId": "marisol",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-28-night",
-    "date": "2026-10-28",
-    "templateId": "night",
-    "staffId": "pochi",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-29-morning",
-    "date": "2026-10-29",
-    "templateId": "morning",
-    "staffId": "marisol",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-29-afternoon",
-    "date": "2026-10-29",
-    "templateId": "afternoon",
-    "staffId": "joha",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-29-night",
-    "date": "2026-10-29",
-    "templateId": "night",
-    "staffId": "pochi",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-30-morning",
-    "date": "2026-10-30",
-    "templateId": "morning",
-    "staffId": "pochi",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-30-afternoon",
-    "date": "2026-10-30",
-    "templateId": "afternoon",
-    "staffId": "joha",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-30-night",
-    "date": "2026-10-30",
-    "templateId": "night",
-    "staffId": "marisol",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  },
-  {
-    "id": "original-31-morning",
-    "date": "2026-10-31",
-    "templateId": "morning",
-    "staffId": "joha",
-    "start": "07:00",
-    "end": "15:00",
-    "note": ""
-  },
-  {
-    "id": "original-31-afternoon",
-    "date": "2026-10-31",
-    "templateId": "afternoon",
-    "staffId": "marisol",
-    "start": "15:00",
-    "end": "23:00",
-    "note": ""
-  },
-  {
-    "id": "original-31-night",
-    "date": "2026-10-31",
-    "templateId": "night",
-    "staffId": "pochi",
-    "start": "23:00",
-    "end": "07:00",
-    "note": ""
-  }
-];
+/* Casa Hogar Cintia Botto · Almanaque compartido con Supabase */
+const SEED_ASSIGNMENTS = [];
 const SEED = {
   version:3, facility:'Casa Hogar Cintia Botto', periodStart:'2026-10-17', periodEnd:'2026-10-31',
   minRest:12,maxConsecutive:6,weeklyLimit:48,
@@ -465,38 +55,117 @@ const cap=s=>s.charAt(0).toLocaleUpperCase('es-AR')+s.slice(1);
 const formatMonth=s=>cap(dateObj(s).toLocaleDateString('es-AR',{month:'long',year:'numeric'}));
 const hexColor=color=>/^#[0-9a-f]{6}$/i.test(color||'')?color:'#a44570';
 const initials=name=>String(name||'?').split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
-function readDB(){try{const raw=localStorage.getItem(STORAGE);if(raw){const data=JSON.parse(raw);if(data?.version===3&&Array.isArray(data.assignments)&&Array.isArray(data.staff)&&Array.isArray(data.templates)){return {...copy(SEED),...data};}}}catch(e){console.warn('Datos anteriores ilegibles',e);}return copy(SEED);}
-function readAccounts(){try{const found=JSON.parse(localStorage.getItem(ACCOUNT_STORAGE)||'null');if(Array.isArray(found)&&found.length)return found;}catch(e){}return [{id:'default-botto',username:'botto',password:'botto',role:'admin',active:true}];}
-function readSession(){try{const found=JSON.parse(sessionStorage.getItem(SESSION)||'null');return found?.id?found:null;}catch(e){return null;}}
-let resumeDayAfterLogin=false;let db=readDB(),accounts=readAccounts(),session=readSession(),tab='calendar',month=(validDate(db.periodStart)?db.periodStart:'2026-10-17').slice(0,7),selectedDate=validDate(db.periodStart)?db.periodStart:'2026-10-17',mobileMenu=false,filterStaff='',filterText='',filterDate='';
-const admin=()=>!!session&&accounts.some(a=>a.id===session.id&&a.active!==false&&a.role==='admin');
+// Supabase es la única fuente de datos. No se reutilizan guardias antiguas del navegador.
+const SUPABASE_URL = 'https://hixperwunybtomxbbuwd.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_F7Henae_qE3ZqE9yDy0zoQ_F_r2OGFa';
+const client = window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}
+});
+let resumeDayAfterLogin=false;
+let db={...copy(SEED),assignments:[],staff:[],templates:[],history:[]};
+let session=null,tab='calendar',month=dateISO(new Date()).slice(0,7),selectedDate=dateISO(new Date());
+let mobileMenu=false,filterStaff='',filterText='',filterDate='';
+let loading=true,loadError='',fetchId=0,realtimeChannel=null,reloadDebounce=null,requestBusy=false;
+const admin=()=>Boolean(session?.role==='admin');
 const staff=id=>db.staff.find(s=>s.id===id);
 const template=id=>db.templates.find(t=>t.id===id);
+const shortTime=value=>String(value??'').slice(0,5);
+function requireSuccess(result,contexto){
+  if(result.error) throw new Error(`${contexto}: ${result.error.message}`);
+  return result.data;
+}
+function guardBusy(){if(requestBusy){notify('Esperá a que termine el guardado anterior.','error');return false;}requestBusy=true;return true;}
+function readClientError(err){console.error(err);return String(err?.message||err||'Error desconocido');}
+async function loadRemote({silent=false}={}){
+  if(!client){loading=false;loadError='No se pudo iniciar la biblioteca de Supabase. Revisá la conexión a internet.';render();return false;}
+  const ticket=++fetchId;
+  if(!silent){loading=true;loadError='';render();}
+  try{
+    // La vista pública consulta únicamente columnas autorizadas por RLS/GRANT.
+    const authenticated=admin();
+    const reads=await Promise.all([
+      client.from('calendar_staff').select(authenticated?'id,name,color,active,notes':'id,name,color,active').order('name'),
+      client.from('calendar_templates').select('id,name,start_time,end_time').order('id'),
+      client.from('calendar_shifts').select(authenticated?'id,shift_date,template_id,staff_id,start_time,end_time,note,updated_at':'id,shift_date,template_id,staff_id,start_time,end_time,updated_at').order('shift_date'),
+      client.from('calendar_settings').select(authenticated?'*':'id,facility,period_start,period_end').eq('id',1).maybeSingle()
+    ]);
+    const [staffRows,templateRows,shiftRows,settingsRow]=reads.map((r,i)=>requireSuccess(r,['Trabajadoras','Tipos de turno','Guardias','Configuración'][i]));
+    if(ticket!==fetchId)return true;
+    db.staff=(staffRows||[]).map(x=>({id:x.id,name:x.name,color:x.color,active:x.active,notes:x.notes||''}));
+    db.templates=(templateRows||[]).map(x=>({id:x.id,name:x.name,start:shortTime(x.start_time),end:shortTime(x.end_time)}));
+    db.assignments=(shiftRows||[]).map(x=>({id:x.id,date:x.shift_date,templateId:x.template_id,staffId:x.staff_id||'',start:shortTime(x.start_time),end:shortTime(x.end_time),note:x.note||''}));
+    if(settingsRow){db.facility=settingsRow.facility||SEED.facility;db.periodStart=settingsRow.period_start;db.periodEnd=settingsRow.period_end;}
+    loading=false;loadError='';render();return true;
+  }catch(err){
+    if(ticket!==fetchId)return false;
+    loading=false;loadError=readClientError(err);render();return false;
+  }
+}
+async function readAdmin(){
+  const {data:{session:authSession},error}=await client.auth.getSession();
+  if(error)throw error;
+  if(!authSession){session=null;return;}
+  const result=await client.from('calendar_admins').select('role').eq('user_id',authSession.user.id).maybeSingle();
+  if(result.error)throw result.error;
+  session=result.data?.role==='admin'?{id:authSession.user.id,username:'botto',role:'admin'}:null;
+}
+function subscribeChanges(){
+  if(realtimeChannel)client.removeChannel(realtimeChannel);
+  realtimeChannel=client.channel('almanaque-botto-guardias')
+    .on('postgres_changes',{event:'*',schema:'public',table:'calendar_staff'},debouncedReload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'calendar_templates'},debouncedReload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'calendar_shifts'},debouncedReload)
+    .on('postgres_changes',{event:'*',schema:'public',table:'calendar_settings'},debouncedReload)
+    .subscribe();
+}
+function debouncedReload(){clearTimeout(reloadDebounce);reloadDebounce=setTimeout(()=>loadRemote({silent:true}),400);}
+async function startCloud(){
+  try{
+    if(!client)throw new Error('No se pudo cargar Supabase. Comprobá internet.');
+    await readAdmin();
+    subscribeChanges();
+    await loadRemote();
+    // Respaldo por actualización periódica si la conexión de Realtime se corta.
+    setInterval(()=>{if(!document.hidden&&!requestBusy)loadRemote({silent:true});},30000);
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!requestBusy)loadRemote({silent:true});});
+    client.auth.onAuthStateChange((event)=>{
+      if(['SIGNED_IN','SIGNED_OUT','USER_UPDATED'].includes(event)){
+        setTimeout(async()=>{try{await readAdmin();await loadRemote({silent:true});}catch(err){notify(readClientError(err),'error');}},0);
+      }
+    });
+  }catch(err){loading=false;loadError=readClientError(err);render();}
+}
 const shiftsOn=date=>db.assignments.filter(a=>a.date===date).sort((a,b)=>a.start.localeCompare(b.start));
 const duration=a=>{if(!a)return 0;const [h,m]=(a.start||'00:00').split(':').map(Number),[he,me]=(a.end||'00:00').split(':').map(Number);let dif=(he*60+me)-(h*60+m);if(dif<=0)dif+=24*60;return +(dif/60).toFixed(1);};
 function totals(){const list=db.assignments.filter(a=>a.date>=db.periodStart&&a.date<=db.periodEnd);return {shifts:list.length,team:db.staff.filter(s=>s.active!==false).length,hours:list.reduce((s,a)=>s+duration(a),0)};}
-function changed(action){db.updatedAt=new Date().toISOString();db.history=Array.isArray(db.history)?db.history:[];db.history.unshift({id:id('h'),at:db.updatedAt,by:session?.username||'Sistema',action});db.history=db.history.slice(0,150);try{localStorage.setItem(STORAGE,JSON.stringify(db));}catch(err){notify('No se pudo guardar. Descargá un respaldo JSON.','error');}render();}
-function saveAccounts(){try{localStorage.setItem(ACCOUNT_STORAGE,JSON.stringify(accounts));}catch(e){notify('No se pudieron guardar las cuentas.','error');}}
+async function changed(action){
+  // Operaciones persistidas explícitamente en Supabase; solamente registra estado de UI.
+  db.updatedAt=new Date().toISOString();
+  db.history.unshift({id:id('h'),at:db.updatedAt,by:'botto',action});
+  db.history=db.history.slice(0,60);
+  return loadRemote({silent:true});
+}
 function notify(message,type='normal'){const root=$('#toast-root');root.innerHTML=`<div class="toast ${type==='error'?'error':''}">${esc(message)}</div>`;clearTimeout(notify.timer);notify.timer=setTimeout(()=>{root.innerHTML='';},3600);}
 const btn=(label,act,cls='',props='')=>`<button type="button" class="btn ${cls}" data-action="${act}" ${props}>${label}</button>`;
 const iconBtn=(name,act,props='')=>btn(icon(name),act,'icon-btn',props);
-const nav=[['calendar','calendar','Almanaque'],['shifts','list','Guardias'],['staff','people','Trabajadoras'],['reports','chart','Informes'],['accounts','shield','Accesos'],['history','history','Actividad']];
-function render(){if(!admin()&&!['calendar','shifts','reports'].includes(tab))tab='calendar';if(!validDate(selectedDate))selectedDate=db.periodStart;const title={calendar:'Almanaque general',shifts:'Gestión de guardias',staff:'Trabajadoras',reports:'Informes',accounts:'Usuarios y accesos',history:'Registro de actividad'}[tab];
- $('#app').innerHTML=`<div class="app-shell"><aside class="sidebar ${mobileMenu?'open':''}" id="sidebar"><div class="brand"><div class="brand-mark">CB</div><div><div class="brand-name">Casa Hogar<br>Cintia Botto</div><div class="brand-sub">Organización de guardias</div></div></div><div class="nav-group">${admin()?'Administración':'Consultas'}</div><nav class="sidebar-nav" aria-label="Navegación">${nav.filter(n=>admin()||['calendar','shifts','reports'].includes(n[0])).map(([key,ico,label])=>`<button type="button" class="nav-link ${tab===key?'active':''}" data-nav="${key}" ${tab===key?'aria-current="page"':''}>${icon(ico)}<span>${label}</span></button>`).join('')}</nav><div class="sidebar-foot"><div class="storage-hint">${icon('check')}<span>Guardado local en este navegador. Los cambios no se comparten con otros dispositivos.</span></div></div></aside><div class="mobile-scrim ${mobileMenu?'open':''}" id="mobile-scrim"></div><div class="main-shell"><header class="topbar"><div class="breadcrumb"><button class="mobile-toggle" id="menu-toggle" type="button" aria-label="Abrir menú">${icon('menu')}</button><div>Casa Hogar Cintia Botto<strong>${esc(title)}</strong></div></div><div class="top-actions">${btn(icon('camera')+'<span class="hide-mobile">Sacar foto</span>','photo','', 'aria-label="Sacar foto del calendario"')}${btn(icon(session?'logout':'shield')+`<span class="hide-mobile">${session?'Cerrar sesión':'Ingresar'}</span>`,session?'logout':'login','secondary',`aria-label="${session?'Cerrar sesión':'Ingresar a administración'}"`)}</div></header><main class="main">${tab==='calendar'?calendarPage():tab==='shifts'?shiftsPage():tab==='staff'?staffPage():tab==='reports'?reportsPage():tab==='accounts'?accountsPage():historyPage()}<div class="page-foot">${esc(db.facility)} · Almanaque de guardias · Almacenamiento local</div></main></div></div>`;
+const nav=[['calendar','calendar','Almanaque'],['shifts','list','Guardias'],['staff','people','Trabajadoras'],['reports','chart','Informes']];
+function render(){if(loading||loadError){$('#app').innerHTML=`<div class="cloud-loading"><div class="cloud-card"><h1>Casa Hogar Cintia Botto</h1><p>${loadError?'No se pudo cargar el almanaque: '+esc(loadError):'Conectando con el calendario compartido…'}</p>${loadError?btn('Reintentar conexión','retry','primary'):''}</div></div>`;return;}if(!admin()&&tab!=='calendar')tab='calendar';if(!validDate(selectedDate))selectedDate=db.periodStart;const title={calendar:'Almanaque general',shifts:'Gestión de guardias',staff:'Trabajadoras',reports:'Informes',accounts:'Usuarios y accesos',history:'Registro de actividad'}[tab];
+ $('#app').innerHTML=`<div class="app-shell"><aside class="sidebar ${mobileMenu?'open':''}" id="sidebar"><div class="brand"><div class="brand-mark">CB</div><div><div class="brand-name">Casa Hogar<br>Cintia Botto</div><div class="brand-sub">Organización de guardias</div></div></div><div class="nav-group">${admin()?'Administración':'Calendario público'}</div><nav class="sidebar-nav" aria-label="Navegación">${nav.filter(n=>admin()||n[0]==='calendar').map(([key,ico,label])=>`<button type="button" class="nav-link ${tab===key?'active':''}" data-nav="${key}" ${tab===key?'aria-current="page"':''}>${icon(ico)}<span>${label}</span></button>`).join('')}</nav><div class="sidebar-foot"><div class="storage-hint">${icon('check')}<span>Calendario compartido mediante Supabase. Los cambios se sincronizan entre dispositivos.</span></div></div></aside><div class="mobile-scrim ${mobileMenu?'open':''}" id="mobile-scrim"></div><div class="main-shell"><header class="topbar"><div class="breadcrumb"><button class="mobile-toggle" id="menu-toggle" type="button" aria-label="Abrir menú">${icon('menu')}</button><div>Casa Hogar Cintia Botto<strong>${esc(title)}</strong></div></div><div class="top-actions">${btn(icon('camera')+'<span class="hide-mobile">Sacar foto</span>','photo','', 'aria-label="Sacar foto del calendario"')}${btn(icon(session?'logout':'shield')+`<span class="hide-mobile">${session?'Cerrar sesión':'Ingresar'}</span>`,session?'logout':'login','secondary',`aria-label="${session?'Cerrar sesión':'Ingresar a administración'}"`)}</div></header><main class="main">${tab==='calendar'?calendarPage():tab==='shifts'?shiftsPage():tab==='staff'?staffPage():tab==='reports'?reportsPage():tab==='accounts'?accountsPage():historyPage()}<div class="page-foot">${esc(db.facility)} · Almanaque de guardias · Sincronizado en la nube</div></main></div></div>`;
 }
 function header(eyebrow,title,desc,actions=''){return `<div class="page-head"><div><div class="eyebrow">${esc(eyebrow)}</div><h1>${esc(title)}</h1><p class="page-desc">${esc(desc)}</p></div>${actions?`<div class="row-actions">${actions}</div>`:''}</div>`;}
 function statsStrip(){const s=totals();return `<div class="kpi-strip"><div class="kpi"><span class="kpi-icon">${icon('calendar')}</span><div><small>Guardias del período</small><strong>${s.shifts}</strong></div></div><div class="kpi"><span class="kpi-icon">${icon('people')}</span><div><small>Trabajadoras activas</small><strong>${s.team}</strong></div></div><div class="kpi"><span class="kpi-icon">${icon('clock')}</span><div><small>Horas programadas</small><strong>${s.hours} h</strong></div></div></div>`;}
-function calendarPage(){const actions=admin()?btn(icon('settings')+' Editar almanaque','period')+btn(icon('plus')+' Nueva guardia','new-shift','primary'):btn(icon('download')+' Exportar CSV','csv');return header('Planificación del equipo','Almanaque de guardias',`${formatDate(db.periodStart,'short')} al ${formatDate(db.periodEnd,'short')} · Tocá cualquier fecha para ${admin()?'gestionar':'consultar'} sus turnos.`,actions)+statsStrip()+`<div class="workspace"><section class="panel" aria-label="Calendario mensual"><div class="panel-heading"><div><h2 class="month-title">${formatMonth(month+'-01')}</h2><p>${admin()?'Elegí una fecha para añadir, editar o eliminar guardias.':'Elegí una fecha para ver los turnos. Ingresá como administrador para editarlos.'}</p></div><div class="month-controls">${iconBtn('chevronLeft','previous-month','aria-label="Mes anterior"')}${btn('Hoy','today','small today-btn')}${iconBtn('chevronRight','next-month','aria-label="Mes siguiente"')}</div></div>${monthGrid()}<div class="calendar-footer"><span><i></i> Los puntos indican guardias cargadas</span><span>${admin()?'Tocá un día para editar':'Vista de consulta'}</span></div></section><div class="detail-column"><div class="panel" id="day-panel"><div class="detail-card">${dayDetail(selectedDate)}</div></div><div class="panel"><div class="detail-card note-card"><div class="note-icon">${icon('information')} Accesos rápidos</div><p>${admin()?'Organizá el personal, cambiá horarios y descargá un respaldo de tu almanaque.':'Consultá los turnos de cada fecha. Las modificaciones requieren acceso administrativo.'}</p>${admin()?`<div class="detail-actions">${btn(icon('people')+' Trabajadoras','goto-staff','small')}${btn(icon('download')+' Respaldo','backup','small')}${btn(icon('upload')+' Importar copia','restore','small')}</div>`:''}</div></div></div></div>`;}
+function calendarPage(){const actions=admin()?btn(icon('settings')+' Editar almanaque','period')+btn(icon('plus')+' Nueva guardia','new-shift','primary'):'';return header('Planificación del equipo','Almanaque de guardias',`${formatDate(db.periodStart,'short')} al ${formatDate(db.periodEnd,'short')} · Tocá cualquier fecha para ${admin()?'gestionar':'consultar'} sus turnos.`,actions)+(admin()?statsStrip():'')+`<div class="workspace"><section class="panel" aria-label="Calendario mensual"><div class="panel-heading"><div><h2 class="month-title">${formatMonth(month+'-01')}</h2><p>${admin()?'Elegí una fecha para añadir, editar o eliminar guardias.':'Elegí una fecha para ver los turnos. Ingresá como administrador para editarlos.'}</p></div><div class="month-controls">${iconBtn('chevronLeft','previous-month','aria-label="Mes anterior"')}${btn('Hoy','today','small today-btn')}${iconBtn('chevronRight','next-month','aria-label="Mes siguiente"')}</div></div>${monthGrid()}<div class="calendar-footer"><span><i></i> Los puntos indican guardias cargadas</span><span>${admin()?'Tocá un día para editar':'Vista de consulta'}</span></div></section><div class="detail-column"><div class="panel" id="day-panel"><div class="detail-card">${dayDetail(selectedDate)}</div></div>${admin()?`<div class="panel"><div class="detail-card note-card"><div class="note-icon">${icon('information')} Accesos rápidos</div><p>Organizá el personal, cambiá horarios y descargá un respaldo de tu almanaque.</p><div class="detail-actions">${btn(icon('people')+' Trabajadoras','goto-staff','small')}${btn(icon('download')+' Respaldo','backup','small')}</div></div></div>`:''}</div></div>`;}
 function monthGrid(){const [y,m]=month.split('-').map(Number),first=new Date(y,m-1,1),pad=(first.getDay()+6)%7,days=new Date(y,m,0).getDate(),count=Math.ceil((pad+days)/7)*7;let out='<div class="weekdays">'+['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(x=>`<div class="weekday">${x}</div>`).join('')+'</div><div class="month-grid">';const today=dateISO(new Date());for(let i=0;i<count;i++){const date=dateISO(new Date(y,m-1,i-pad+1)),outside=date.slice(0,7)!==month,list=shiftsOn(date),active=date===selectedDate;out+=`<button type="button" class="day ${outside?'outside-month':''} ${date<db.periodStart||date>db.periodEnd?'outside-period':''} ${active?'active-day':''} ${date===today?'today':''}" data-date="${date}" aria-label="${esc(formatDate(date))}; ${list.length} guardias" aria-pressed="${active}"><div class="date-row"><span class="date-number">${Number(date.slice(-2))}</span></div><div class="shift-list-preview">${list.slice(0,3).map(a=>{const person=staff(a.staffId);return `<div class="shift-mini"><i class="shift-dot" style="background:${hexColor(person?.color)}"></i><span class="shift-name">${esc(person?.name||'Sin asignar')}</span><span class="shift-time">${esc(a.start)}</span></div>`}).join('')}${list.length>3?`<span class="more-mini">+${list.length-3} más</span>`:''}</div><div class="day-count">${list.slice(0,4).map(a=>`<i style="background:${hexColor(staff(a.staffId)?.color)}"></i>`).join('')}${list.length>4?'<span class="many">+</span>':''}</div></button>`;}return out+'</div>';}
 function personLabel(a){const p=staff(a.staffId);return `<span class="person-pill"><i style="background:${hexColor(p?.color)}"></i>${esc(p?.name||'Sin asignar')}</span>`;}
 function dayDetail(date){const arr=shiftsOn(date);return `<div class="detail-kicker">Día seleccionado</div><h2 class="detail-date">${esc(cap(formatDate(date)))}</h2><p class="detail-sub">${arr.length} ${arr.length===1?'guardia programada':'guardias programadas'}</p><div class="detail-actions">${admin()?btn(icon('plus')+' Añadir guardia','new-shift','primary small',`data-date="${date}"`):btn(icon('shield')+' Ingresar para editar','login-day','primary small')}${btn(icon('camera')+' Sacar foto','photo','small')}</div><div class="divider"></div>${arr.length?arr.map(a=>dayShift(a)).join(''):`<div class="empty-state"><strong>No hay guardias cargadas</strong>${admin()?'Seleccioná «Añadir guardia» para organizar este día.':'Ingresá como administrador para crear una guardia.'}</div>`}`;}
 function dayShift(a){const t=template(a.templateId);return `<div class="shift-entry"><div class="shift-icon">${icon('clock')}</div><div class="shift-entry-info"><strong>${esc(t?.name||'Guardia personalizada')}</strong><small>${personLabel(a)}</small><div class="shift-entry-meta">${esc(a.start)} a ${esc(a.end)}${a.end<=a.start?' · finaliza al día siguiente':''} · ${duration(a)} h</div>${a.note?`<div class="shift-entry-meta">${esc(a.note)}</div>`:''}</div>${admin()?`<div class="shift-controls">${btn(icon('edit')+' Editar','edit-shift','small',`data-id="${esc(a.id)}" aria-label="Editar ${esc(t?.name||'guardia')}"`)}${btn(icon('trash')+' Eliminar','delete-shift','small danger',`data-id="${esc(a.id)}" aria-label="Eliminar ${esc(t?.name||'guardia')}"`)}</div>`:''}</div>`;}
 function dayModal(date){const arr=shiftsOn(date),editable=admin();openModal(cap(formatDate(date)),`${arr.length} ${arr.length===1?'guardia':'guardias'} · ${editable?'Podés editar este día':'Vista de consulta'}`,`${arr.length?arr.map(a=>dayShift(a)).join(''):`<div class="empty-state"><strong>Este día todavía no tiene guardias.</strong>${editable?'Podés crear una ahora.':'Ingresá como administrador para agregar una.'}</div>`}${!editable?`<div class="day-access-hint">${icon('shield')} Para agregar, editar o eliminar guardias, ingresá con tu cuenta administradora.</div>`:''}<div class="modal-actions">${editable?btn(icon('plus')+' Añadir guardia','new-shift','primary',`data-date="${date}"`):btn(icon('shield')+' Ingresar para editar','login-day','primary')}${btn('Cerrar','close-modal')}</div>`);}
-function shiftsPage(){let list=[...db.assignments].sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));if(filterStaff)list=list.filter(x=>x.staffId===filterStaff);if(filterDate)list=list.filter(x=>x.date===filterDate);if(filterText)list=list.filter(x=>[staff(x.staffId)?.name,template(x.templateId)?.name,x.note].join(' ').toLowerCase().includes(filterText.toLowerCase()));const actions=admin()?btn(icon('plus')+' Nueva guardia','new-shift','primary'):'';return header('Control de turnos','Todas las guardias','Consultá, filtrá y modificá las guardias registradas.',actions)+`<section class="panel"><div class="filter-bar"><input class="form-control search-input" placeholder="Buscar por nombre o turno" aria-label="Buscar guardias" id="shift-search" value="${esc(filterText)}"><select class="form-control" id="shift-staff" aria-label="Filtrar trabajadora"><option value="">Todas las trabajadoras</option>${db.staff.map(s=>`<option value="${esc(s.id)}" ${filterStaff===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select><input type="date" class="form-control" id="shift-date" aria-label="Filtrar fecha" value="${esc(filterDate)}">${btn('Limpiar','clear-filters','small')}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Fecha</th><th>Turno</th><th>Trabajadora</th><th>Horario</th><th>Horas</th><th style="text-align:right">Acción</th></tr></thead><tbody>${list.map(a=>`<tr><td>${formatDate(a.date,'short')}</td><td class="table-name">${esc(template(a.templateId)?.name||'Guardia')}</td><td>${personLabel(a)}</td><td>${esc(a.start)}–${esc(a.end)}</td><td>${duration(a)} h</td><td><div class="table-actions">${btn(icon(admin()?'edit':'information')+' '+(admin()?'Editar':'Ver'),admin()?'edit-shift':'show-shift','small',`data-id="${esc(a.id)}"`)}</div></td></tr>`).join('')}</tbody></table>${!list.length?'<div class="empty-state">No hay guardias que coincidan con los filtros.</div>':''}</div><div class="toolbar-actions">${btn(icon('download')+' Descargar CSV','csv','small')}${admin()?btn(icon('download')+' Copia de seguridad','backup','small')+btn(icon('upload')+' Importar copia','restore','small'):''}<span class="pill">${list.length} resultados</span></div></section>`;}
+function shiftsPage(){let list=[...db.assignments].sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start));if(filterStaff)list=list.filter(x=>x.staffId===filterStaff);if(filterDate)list=list.filter(x=>x.date===filterDate);if(filterText)list=list.filter(x=>[staff(x.staffId)?.name,template(x.templateId)?.name,x.note].join(' ').toLowerCase().includes(filterText.toLowerCase()));const actions=admin()?btn(icon('plus')+' Nueva guardia','new-shift','primary'):'';return header('Control de turnos','Todas las guardias','Consultá, filtrá y modificá las guardias registradas.',actions)+`<section class="panel"><div class="filter-bar"><input class="form-control search-input" placeholder="Buscar por nombre o turno" aria-label="Buscar guardias" id="shift-search" value="${esc(filterText)}"><select class="form-control" id="shift-staff" aria-label="Filtrar trabajadora"><option value="">Todas las trabajadoras</option>${db.staff.map(s=>`<option value="${esc(s.id)}" ${filterStaff===s.id?'selected':''}>${esc(s.name)}</option>`).join('')}</select><input type="date" class="form-control" id="shift-date" aria-label="Filtrar fecha" value="${esc(filterDate)}">${btn('Limpiar','clear-filters','small')}</div><div class="table-wrap"><table class="data-table"><thead><tr><th>Fecha</th><th>Turno</th><th>Trabajadora</th><th>Horario</th><th>Horas</th><th style="text-align:right">Acción</th></tr></thead><tbody>${list.map(a=>`<tr><td>${formatDate(a.date,'short')}</td><td class="table-name">${esc(template(a.templateId)?.name||'Guardia')}</td><td>${personLabel(a)}</td><td>${esc(a.start)}–${esc(a.end)}</td><td>${duration(a)} h</td><td><div class="table-actions">${btn(icon(admin()?'edit':'information')+' '+(admin()?'Editar':'Ver'),admin()?'edit-shift':'show-shift','small',`data-id="${esc(a.id)}"`)}</div></td></tr>`).join('')}</tbody></table>${!list.length?'<div class="empty-state">No hay guardias que coincidan con los filtros.</div>':''}</div><div class="toolbar-actions">${btn(icon('download')+' Descargar CSV','csv','small')}${admin()?btn(icon('download')+' Copia de seguridad','backup','small'):''}<span class="pill">${list.length} resultados</span></div></section>`;}
 function staffPage(){return header('Equipo de trabajo','Trabajadoras','Agregá, editá o desactivá trabajadoras sin perder sus guardias.',btn(icon('plus')+' Añadir nueva trabajadora','new-staff','primary'))+`<div class="section-grid"><section class="panel"><div class="panel-heading"><div><h2>Personal registrado</h2><p>${db.staff.length} trabajadoras registradas</p></div></div><div class="item-list">${db.staff.map(s=>{const list=db.assignments.filter(a=>a.staffId===s.id);return `<div class="item-row"><div class="item-icon avatar" style="background:${hexColor(s.color)}19;color:${hexColor(s.color)}">${esc(initials(s.name))}</div><div class="item-content"><strong>${esc(s.name)} <span class="pill ${s.active!==false?'good':''}">${s.active!==false?'Activa':'Inactiva'}</span></strong><small>${list.length} guardias · ${list.reduce((total,a)=>total+duration(a),0)} horas acumuladas</small></div><div class="item-buttons">${btn(icon('edit')+' Editar','edit-staff','small',`data-id="${esc(s.id)}"`)}</div></div>`;}).join('')}</div></section><aside class="panel section-side"><h3>Organización del equipo</h3><p>Al agregar una trabajadora, aparece inmediatamente en el selector de guardias. Podés asignarle un color para identificarla fácilmente en el almanaque.</p><div class="banner" style="margin-top:20px"><strong>Sin pérdida de historial</strong><br>Desactivar una trabajadora evita que aparezca entre las opciones habituales, pero conserva las guardias que ya tenía asignadas.</div></aside></div>`;}
 function reportsPage(){const within=db.assignments.filter(a=>a.date>=db.periodStart&&a.date<=db.periodEnd);return header('Información general','Resumen del equipo','Cantidad de guardias y horas por trabajadora dentro del período configurado.',btn(icon('download')+' Exportar CSV','csv'))+statsStrip()+`<section class="panel"><div class="panel-heading"><div><h2>Distribución por trabajadora</h2><p>Del ${formatDate(db.periodStart,'short')} al ${formatDate(db.periodEnd,'short')}</p></div></div><div class="item-list">${db.staff.map(s=>{const list=within.filter(a=>a.staffId===s.id),hours=list.reduce((v,a)=>v+duration(a),0);return `<div class="item-row"><div class="item-icon avatar" style="background:${hexColor(s.color)}19;color:${hexColor(s.color)}">${esc(initials(s.name))}</div><div class="item-content"><strong>${esc(s.name)}</strong><small>${list.length} guardias · ${hours} horas · ${list.filter(x=>x.templateId==='night').length} noches</small></div><span class="pill">${hours} h</span></div>`;}).join('')}</div></section>`;}
-function accountsPage(){return header('Administración','Usuarios y accesos','Creá cuentas para edición o solo consulta en este navegador.',btn(icon('plus')+' Nueva cuenta','new-account','primary'))+`<div class="section-grid"><section class="panel"><div class="panel-heading"><h2>Cuentas registradas</h2></div><div class="item-list">${accounts.map(a=>`<div class="item-row"><div class="item-icon avatar" style="background:#f8edf2;color:#a44570">${esc(initials(a.username))}</div><div class="item-content"><strong>${esc(a.username)}</strong><small>${a.role==='admin'?'Administrador':'Solo consulta'} · ${a.active!==false?'Activa':'Inactiva'}</small></div><div class="item-buttons">${btn(icon('edit')+' Editar','edit-account','small',`data-id="${esc(a.id)}"`)}</div></div>`).join('')}</div></section><aside class="panel section-side"><h3>Acceso local</h3><p>Estas cuentas funcionan solamente en este navegador. Como el archivo HTML no tiene servidor, las credenciales no ofrecen seguridad real frente a quien pueda inspeccionar el archivo o los datos locales.</p><div class="banner" style="margin-top:20px">Para acceder desde distintos dispositivos y compartir cambios, hace falta una base de datos y autenticación en un servidor.</div></aside></div>`;}
-function historyPage(){return header('Auditoría local','Registro de actividad','Últimas modificaciones del almanaque almacenadas en este navegador.',btn(icon('download')+' Respaldo','backup'))+`<section class="panel section-side">${Array.isArray(db.history)&&db.history.length?db.history.map(h=>`<div class="activity"><strong>${esc(h.action||'Cambio registrado')}</strong><small>${esc(h.by||'Sistema')} · ${new Date(h.at).toLocaleString('es-AR')}</small></div>`).join(''):'<div class="empty-state">Todavía no se registraron cambios.</div>'}</section>`;}
+// Las cuentas se administran con Supabase Auth, nunca desde el HTML público.
+function accountsPage(){return header('Administración','Cuenta administradora','Los permisos se gestionan en Supabase Auth y calendar_admins.')+`<section class="panel section-side"><h3>Acceso protegido</h3><p>La identidad se valida desde Supabase. No hay contraseñas guardadas en esta página.</p></section>`;}
+function historyPage(){return header('Actividad','Sesión actual','Las modificaciones del calendario se sincronizan en Supabase. El historial local anterior no se utiliza.')+`<section class="panel section-side"><div class="empty-state">Para auditoría permanente necesitaremos incorporar una tabla de registro de cambios.</div></section>`;}
 function openModal(title,subtitle,content){$('#modal-root').innerHTML=`<div class="overlay" id="modal-overlay"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-header"><div><h2 id="modal-title">${esc(title)}</h2><p>${esc(subtitle||'')}</p></div><button type="button" class="modal-close" data-action="close-modal" aria-label="Cerrar">×</button></div><div class="modal-body">${content}</div></section></div>`;const first=$('#modal-root input,#modal-root select');if(first)first.focus();}
 function closeModal(){$('#modal-root').innerHTML='';}
 function field(label,name,type,value='',opts=''){return `<div class="form-field"><label class="form-label" for="f-${name}">${esc(label)}</label><input id="f-${name}" class="form-control" type="${type}" name="${name}" value="${esc(value)}" ${opts}></div>`;}
@@ -505,13 +174,13 @@ function shiftEditor(itemId='',date=selectedDate){if(!admin())return showLogin()
 function staffEditor(personId=''){if(!admin())return showLogin();const p=db.staff.find(s=>s.id===personId),v=p||{name:'',color:'#b26689',notes:'',active:true};openModal(p?'Editar trabajadora':'Añadir nueva trabajadora','Los cambios aparecerán en el calendario. ',`<form id="staff-form" data-edit-id="${esc(p?.id||'')}"><div class="form-grid"><div class="form-field wide">${field('Nombre','name','text',v.name,'maxlength="80" required')}</div>${field('Color de identificación','color','color',hexColor(v.color),'required')}<div class="form-field"><label for="f-active" class="form-label">Estado</label><select class="form-control" id="f-active" name="active"><option value="true" ${v.active!==false?'selected':''}>Activa</option><option value="false" ${v.active===false?'selected':''}>Inactiva</option></select></div><div class="form-field wide"><label for="f-notes" class="form-label">Notas (opcional)</label><textarea class="form-control" id="f-notes" name="notes" maxlength="250">${esc(v.notes||'')}</textarea></div></div><div class="modal-actions">${p?btn(icon('trash')+' Eliminar','delete-staff','danger',`data-id="${esc(p.id)}"`):''}${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">${icon('save')} Guardar trabajadora</button></div></form>`);}
 function periodEditor(){if(!admin())return showLogin();openModal('Editar almanaque','Configurá el período y los horarios de tus guardias.',`<form id="period-form"><div class="form-grid"><div class="form-field wide">${field('Nombre del hogar','facility','text',db.facility,'required maxlength="95"')}</div>${field('Desde','periodStart','date',db.periodStart,'required')}${field('Hasta','periodEnd','date',db.periodEnd,'required')}</div><hr><div class="panel-title">${icon('clock')}<strong>Horarios de turnos</strong></div><p class="form-help">Los cambios de horario base se aplican a nuevas guardias. Cada guardia existente conserva sus horas hasta que la edites.</p>${db.templates.map(t=>`<div class="item-row"><div class="item-content"><strong>${esc(t.name)}</strong><small>${esc(t.start)} – ${esc(t.end)}</small></div>${btn(icon('edit')+' Editar','edit-template','small',`data-id="${esc(t.id)}"`)}</div>`).join('')}<div class="form-row" style="margin-top:12px">${btn(icon('plus')+' Añadir tipo de turno','new-template','small')}</div><div class="modal-actions">${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">${icon('save')} Guardar período</button></div></form>`);}
 function templateEditor(tid=''){if(!admin())return showLogin();const t=db.templates.find(x=>x.id===tid)||{name:'',start:'07:00',end:'15:00'};openModal(tid?'Editar horario':'Nuevo tipo de turno','Definí el nombre y las horas habituales.',`<form id="template-form" data-edit-id="${esc(tid)}"><div class="form-grid"><div class="form-field wide">${field('Nombre del turno','name','text',t.name,'required maxlength="55"')}</div>${field('Comienza','start','time',t.start,'required')}${field('Termina','end','time',t.end,'required')}</div>${tid?`<label class="form-row form-help" style="margin-top:15px"><input type="checkbox" name="apply" value="true"> Aplicar este horario a todas las guardias existentes de este tipo</label>`:''}<div class="modal-actions">${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">Guardar horario</button></div></form>`);}
-function accountEditor(accountId=''){if(!admin())return showLogin();const a=accounts.find(x=>x.id===accountId),v=a||{username:'',role:'viewer',active:true};openModal(a?'Editar cuenta':'Nueva cuenta','Administrá usuarios y permisos locales.',`<form id="account-form" data-edit-id="${esc(a?.id||'')}"><div class="form-grid"><div class="form-field wide">${field('Usuario','username','text',v.username,'required maxlength="60" autocomplete="off"')}</div><div class="form-field wide">${field(a?'Nueva contraseña (opcional)':'Contraseña','password','password','','autocomplete="new-password" '+(a?'':'required'))}</div><div class="form-field"><label for="f-role" class="form-label">Permiso</label><select class="form-control" name="role" id="f-role"><option value="viewer" ${v.role==='viewer'?'selected':''}>Solo consulta</option><option value="admin" ${v.role==='admin'?'selected':''}>Administrador</option></select></div><div class="form-field"><label for="f-active" class="form-label">Estado</label><select class="form-control" name="active" id="f-active"><option value="true" ${v.active!==false?'selected':''}>Activo</option><option value="false" ${v.active===false?'selected':''}>Inactivo</option></select></div></div><div class="modal-actions">${btn('Cancelar','close-modal')}<button class="btn primary" type="submit">${icon('save')} Guardar cuenta</button></div></form>`);}
-function showLogin(){openModal('Acceso administrativo','Ingresá para administrar el almanaque.',`<form id="login-form"><div class="form-grid"><div class="form-field wide">${field('Usuario','username','text','','required autocomplete="username"')}</div><div class="form-field wide">${field('Contraseña','password','password','','required autocomplete="current-password"')}</div></div><p class="form-help" style="margin-top:15px">El acceso de este HTML es local; no sustituye la autenticación segura de un servidor.</p><div class="modal-actions">${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">Ingresar</button></div></form>`);}
+function accountEditor(){notify('Administrá cuentas en Supabase → Authentication → Users.','error');}
+function showLogin(){openModal('Acceso administrativo','Cuenta de Supabase para gestionar el almanaque.',`<form id="login-form"><div class="form-grid"><div class="form-field wide">${field('Correo de la cuenta administradora','email','email','','required autocomplete="username"')}</div><div class="form-field wide">${field('Contraseña','password','password','','required autocomplete="current-password"')}</div></div><p class="form-help" style="margin-top:15px">Ingresá con el correo y la contraseña que creaste en Supabase Auth. No es la contraseña antigua del HTML.</p><div class="modal-actions">${btn('Cancelar','close-modal')}<button type="submit" class="btn primary">Ingresar</button></div></form>`);}
 function perform(action,el){const itemId=el?.dataset.id||'',date=el?.dataset.date||selectedDate;switch(action){
  case'close-modal':closeModal();break;
  case'login':resumeDayAfterLogin=false;showLogin();break;
  case'login-day':resumeDayAfterLogin=true;showLogin();break;
- case'logout':session=null;sessionStorage.removeItem(SESSION);closeModal();tab='calendar';render();notify('Sesión cerrada.');break;
+ case'logout':void logoutCloud();break;
  case'photo':captureCalendar();break;
  case'previous-month':changeMonth(-1);break;
  case'next-month':changeMonth(1);break;
@@ -531,25 +200,104 @@ function perform(action,el){const itemId=el?.dataset.id||'',date=el?.dataset.dat
  case'edit-account':accountEditor(itemId);break;
  case'csv':exportCSV();break;
  case'backup':exportJSON();break;
- case'restore':importJSON();break;
+ case'restore':notify('La importación masiva está desactivada para proteger el almanaque compartido.','error');break;
  case'clear-filters':filterStaff='';filterText='';filterDate='';render();break;
+ case'retry':loading=true;loadError='';render();void loadRemote();break;
  }}
 function changeMonth(steps){const [y,m]=month.split('-').map(Number),d=new Date(y,m-1+steps,1);month=dateISO(d).slice(0,7);selectedDate=month+'-01';render();}
 function selectDay(date){selectedDate=date;month=date.slice(0,7);render();dayModal(date);}
-function deleteShift(shiftId){if(!admin())return;const a=db.assignments.find(x=>x.id===shiftId);if(!a)return;if(!confirm(`¿Eliminar la guardia del ${formatDate(a.date,'short')} (${a.start}–${a.end})? Esta acción no se puede deshacer.`))return;db.assignments=db.assignments.filter(x=>x.id!==shiftId);closeModal();changed(`Eliminó guardia de ${formatDate(a.date,'short')}`);if(tab==='calendar')dayModal(a.date);notify('Guardia eliminada.');}
-function deleteStaff(personId){if(!admin())return;const p=staff(personId);if(!p)return;const count=db.assignments.filter(a=>a.staffId===personId).length;if(count){notify(`No podés eliminar a ${p.name}: tiene ${count} guardias. Podés desactivarla.`, 'error');return;}if(!confirm(`¿Eliminar a ${p.name} del equipo?`))return;db.staff=db.staff.filter(s=>s.id!==personId);closeModal();changed(`Eliminó trabajadora ${p.name}`);notify('Trabajadora eliminada.');}
-function saveShift(form){const current=form.dataset.editId,old=db.assignments.find(a=>a.id===current),a={id:old?.id||id('g'),date:formVal(form,'date'),templateId:formVal(form,'templateId'),staffId:formVal(form,'staffId'),start:formVal(form,'start'),end:formVal(form,'end'),note:formVal(form,'note')};if(!validDate(a.date)||!template(a.templateId)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(a.start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(a.end)||a.staffId&&!staff(a.staffId)){notify('Revisá los datos de la guardia.','error');return;}
- if(a.staffId){const start=new Date(a.date+'T'+a.start+':00'),end=new Date(a.date+'T'+a.end+':00');if(end<=start)end.setDate(end.getDate()+1);const conflict=db.assignments.find(g=>g.id!==a.id&&g.staffId===a.staffId&&(()=>{const s=new Date(g.date+'T'+g.start+':00'),e=new Date(g.date+'T'+g.end+':00');if(e<=s)e.setDate(e.getDate()+1);return s<end&&e>start;})());if(conflict){notify(`Esa trabajadora ya tiene una guardia que se superpone el ${formatDate(conflict.date,'short')}.`,'error');return;}}
- if(old)Object.assign(old,a);else db.assignments.push(a);selectedDate=a.date;month=a.date.slice(0,7);closeModal();changed(`${old?'Editó':'Añadió'} guardia de ${formatDate(a.date,'short')}`);if(tab==='calendar')dayModal(a.date);notify(old?'Guardia actualizada.':'Guardia añadida.');}
-function saveStaff(form){const current=form.dataset.editId,old=db.staff.find(s=>s.id===current),name=formVal(form,'name'),color=formVal(form,'color'),active=formVal(form,'active')==='true',notes=formVal(form,'notes');if(name.length<2||db.staff.some(s=>s.id!==current&&s.name.toLocaleLowerCase()===name.toLocaleLowerCase())){notify('Ingresá un nombre válido que no esté repetido.','error');return;}if(old)Object.assign(old,{name,color:hexColor(color),active,notes});else db.staff.push({id:id('p'),name,color:hexColor(color),active,notes});closeModal();changed(`${old?'Editó':'Añadió'} trabajadora ${name}`);notify('Trabajadora guardada.');}
-function savePeriod(form){const from=formVal(form,'periodStart'),to=formVal(form,'periodEnd'),facility=formVal(form,'facility');if(!validDate(from)||!validDate(to)||from>to||!facility||(+dateObj(to)-+dateObj(from))/86400000>366){notify('Elegí un período válido de hasta 367 días.','error');return;}db.facility=facility;db.periodStart=from;db.periodEnd=to;selectedDate=from;month=from.slice(0,7);closeModal();changed('Actualizó fechas del almanaque');notify('Almanaque actualizado.');}
-function saveTemplate(form){const current=form.dataset.editId,old=db.templates.find(t=>t.id===current),name=formVal(form,'name'),start=formVal(form,'start'),end=formVal(form,'end');if(!name||!/^\d\d:\d\d$/.test(start)||!/^\d\d:\d\d$/.test(end)){notify('Completá el nombre y los horarios.','error');return;}if(old){Object.assign(old,{name,start,end});if(formVal(form,'apply')==='true')for(const a of db.assignments.filter(a=>a.templateId===old.id)){a.start=start;a.end=end;}}else db.templates.push({id:id('t'),name,start,end});closeModal();changed(`${old?'Editó':'Añadió'} tipo de turno ${name}`);notify('Horario actualizado.');}
-function saveAccount(form){const current=form.dataset.editId,old=accounts.find(a=>a.id===current),username=formVal(form,'username'),password=formVal(form,'password'),role=formVal(form,'role'),active=formVal(form,'active')==='true';if(!/^[a-zA-Z0-9._-]{3,60}$/.test(username)||accounts.some(a=>a.id!==current&&a.username.toLowerCase()===username.toLowerCase())){notify('Usá un usuario válido y no repetido.','error');return;}if((!old||password)&&password.length<4){notify('La contraseña debe tener al menos 4 caracteres.','error');return;}if(old?.id===session?.id&&(!active||role!=='admin')){notify('No podés desactivar o quitarte tu permiso de administrador.','error');return;}if(!accounts.some(a=>a.id!==current&&a.role==='admin'&&a.active!==false)&&role!=='admin'){notify('Debe existir al menos un administrador activo.','error');return;}if(old){Object.assign(old,{username,role,active,...(password?{password}:{})});if(session?.id===old.id){session.username=username;sessionStorage.setItem(SESSION,JSON.stringify(session));}}else accounts.push({id:id('u'),username,password,role,active});saveAccounts();closeModal();changed(`${old?'Editó':'Creó'} cuenta ${username}`);notify('Cuenta guardada.');}
-function loginSubmit(form){const username=formVal(form,'username'),password=formVal(form,'password'),found=accounts.find(a=>a.username.toLowerCase()===username.toLowerCase()&&a.password===password&&a.active!==false);if(!found){notify('Usuario o contraseña incorrectos.','error');return;}session={id:found.id,username:found.username};sessionStorage.setItem(SESSION,JSON.stringify(session));closeModal();tab='calendar';render();if(resumeDayAfterLogin){resumeDayAfterLogin=false;dayModal(selectedDate);}notify('Acceso realizado correctamente.');}
+async function logoutCloud(){
+  await client.auth.signOut();session=null;closeModal();tab='calendar';await loadRemote({silent:true});notify('Sesión cerrada.');
+}
+async function cloudSave(table,record,action){
+  if(!admin()||!guardBusy())return false;
+  try{
+    requireSuccess(await client.from(table).upsert(record,{onConflict:'id'}),action);
+    await changed(action);
+    notify('Cambios guardados en Supabase.');
+    return true;
+  }catch(err){notify('No se guardó: '+readClientError(err),'error');return false;}
+  finally{requestBusy=false;}
+}
+async function deleteShift(shiftId){
+  if(!admin())return;const a=db.assignments.find(x=>x.id===shiftId);if(!a)return;
+  if(!confirm(`¿Eliminar la guardia del ${formatDate(a.date,'short')} (${a.start}–${a.end})? Esta acción no se puede deshacer.`))return;
+  if(!guardBusy())return;
+  try{
+    requireSuccess(await client.from('calendar_shifts').delete().eq('id',shiftId),'Eliminar guardia');
+    await changed('Eliminó guardia');closeModal();if(tab==='calendar')dayModal(a.date);notify('Guardia eliminada del calendario compartido.');
+  }catch(err){notify('Error al eliminar: '+readClientError(err),'error');}
+  finally{requestBusy=false;}
+}
+async function deleteStaff(personId){
+  if(!admin())return;const p=staff(personId);if(!p)return;
+  if(db.assignments.some(a=>a.staffId===personId)){notify('La trabajadora tiene guardias. Desactivala primero.','error');return;}
+  if(!confirm(`¿Eliminar a ${p.name} del equipo?`))return;
+  if(!guardBusy())return;
+  try{requireSuccess(await client.from('calendar_staff').delete().eq('id',personId),'Eliminar trabajadora');await changed('Eliminó trabajadora');closeModal();notify('Trabajadora eliminada.');}
+  catch(err){notify('Error al eliminar: '+readClientError(err),'error');}
+  finally{requestBusy=false;}
+}
+async function saveShift(form){
+  const current=form.dataset.editId,old=db.assignments.find(a=>a.id===current),a={id:old?.id||id('g'),date:formVal(form,'date'),templateId:formVal(form,'templateId'),staffId:formVal(form,'staffId'),start:formVal(form,'start'),end:formVal(form,'end'),note:formVal(form,'note')};
+  if(!validDate(a.date)||!template(a.templateId)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(a.start)||!/^([01]\d|2[0-3]):[0-5]\d$/.test(a.end)||a.staffId&&!staff(a.staffId)){notify('Revisá los datos de la guardia.','error');return;}
+  if(a.staffId){
+    const start=new Date(a.date+'T'+a.start+':00'),end=new Date(a.date+'T'+a.end+':00');if(end<=start)end.setDate(end.getDate()+1);
+    const conflict=db.assignments.find(g=>g.id!==a.id&&g.staffId===a.staffId&&(()=>{const s=new Date(g.date+'T'+g.start+':00'),e=new Date(g.date+'T'+g.end+':00');if(e<=s)e.setDate(e.getDate()+1);return s<end&&e>start;})());
+    if(conflict){notify(`Esa trabajadora ya tiene una guardia superpuesta (${formatDate(conflict.date,'short')}).`,'error');return;}
+  }
+  const success=await cloudSave('calendar_shifts',{id:a.id,shift_date:a.date,template_id:a.templateId,staff_id:a.staffId||null,start_time:a.start,end_time:a.end,note:a.note,updated_at:new Date().toISOString()},old?'Modificar guardia':'Crear guardia');
+  if(success){selectedDate=a.date;month=a.date.slice(0,7);closeModal();render();if(tab==='calendar')dayModal(a.date);}
+}
+async function saveStaff(form){
+  const current=form.dataset.editId,old=db.staff.find(s=>s.id===current),name=formVal(form,'name'),color=formVal(form,'color'),active=formVal(form,'active')==='true',notes=formVal(form,'notes');
+  if(name.length<2||db.staff.some(s=>s.id!==current&&s.name.toLocaleLowerCase()===name.toLocaleLowerCase())){notify('Ingresá un nombre válido que no esté repetido.','error');return;}
+  const success=await cloudSave('calendar_staff',{id:old?.id||id('p'),name,color:hexColor(color),active,notes},old?'Modificar trabajadora':'Añadir trabajadora');
+  if(success)closeModal();
+}
+async function savePeriod(form){
+  const from=formVal(form,'periodStart'),to=formVal(form,'periodEnd'),facility=formVal(form,'facility');
+  if(!validDate(from)||!validDate(to)||from>to||!facility||(+dateObj(to)-+dateObj(from))/86400000>366){notify('Elegí un período válido de hasta 367 días.','error');return;}
+  if(!admin()||!guardBusy())return;
+  try{
+    requireSuccess(await client.from('calendar_settings').update({facility,period_start:from,period_end:to,updated_at:new Date().toISOString()}).eq('id',1),'Editar período');
+    await changed('Actualizó almanaque');selectedDate=from;month=from.slice(0,7);closeModal();render();notify('Período actualizado para todos.');
+  }catch(err){notify('No se guardó: '+readClientError(err),'error');}
+  finally{requestBusy=false;}
+}
+async function saveTemplate(form){
+  const current=form.dataset.editId,old=db.templates.find(t=>t.id===current),name=formVal(form,'name'),start=formVal(form,'start'),end=formVal(form,'end');
+  if(!name||!/^\d\d:\d\d$/.test(start)||!/^\d\d:\d\d$/.test(end)){notify('Completá el nombre y los horarios.','error');return;}
+  if(!admin()||!guardBusy())return;
+  try{
+    const tid=old?.id||id('t');requireSuccess(await client.from('calendar_templates').upsert({id:tid,name,start_time:start,end_time:end},{onConflict:'id'}),'Actualizar tipo de turno');
+    if(old&&formVal(form,'apply')==='true')requireSuccess(await client.from('calendar_shifts').update({start_time:start,end_time:end,updated_at:new Date().toISOString()}).eq('template_id',tid),'Actualizar guardias existentes');
+    await changed('Actualizó tipo de turno');closeModal();notify('Horario sincronizado.');
+  }catch(err){await loadRemote({silent:true});notify('Error al guardar horario: '+readClientError(err),'error');}
+  finally{requestBusy=false;}
+}
+function saveAccount(){notify('Los usuarios se administran desde Supabase Auth.','error');}
+async function loginSubmit(form){
+  const email=formVal(form,'email'),password=formVal(form,'password');
+  if(!email||!password||!guardBusy())return;
+  try{
+    const {data,error}=await client.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    const roleResponse=await client.from('calendar_admins').select('role').eq('user_id',data.user.id).maybeSingle();
+    if(roleResponse.error||roleResponse.data?.role!=='admin'){
+      await client.auth.signOut();throw new Error('La cuenta no tiene permiso de administrador.');
+    }
+    session={id:data.user.id,username:'botto',role:'admin'};closeModal();tab='calendar';await loadRemote({silent:true});
+    if(resumeDayAfterLogin){resumeDayAfterLogin=false;dayModal(selectedDate);}
+    notify('Administrador conectado a Supabase.');
+  }catch(err){notify('No se pudo ingresar: '+readClientError(err),'error');}
+  finally{requestBusy=false;}
+}
 function download(name,data,type){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1800);}
 function exportJSON(){download('respaldo-almanaque-botto-'+dateISO(new Date())+'.json',JSON.stringify({...db,exportedAt:new Date().toISOString()},null,2),'application/json;charset=utf-8');notify('Respaldo descargado.');}
 function exportCSV(){const cell=x=>'"'+String(x??'').replace(/^[=+@\-]/,"'$&").replaceAll('"','""')+'"';const rows=[['Fecha','Turno','Trabajadora','Inicio','Fin','Horas','Observaciones'],...[...db.assignments].sort((a,b)=>a.date.localeCompare(b.date)||a.start.localeCompare(b.start)).map(a=>[a.date,template(a.templateId)?.name||'',staff(a.staffId)?.name||'Sin asignar',a.start,a.end,duration(a),a.note||''])];download('guardias-casa-hogar-botto.csv','\ufeff'+rows.map(row=>row.map(cell).join(';')).join('\r\n'),'text/csv;charset=utf-8');notify('CSV descargado.');}
-function importJSON(){if(!admin())return showLogin();const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.onchange=async()=>{if(!input.files?.length)return;try{const data=JSON.parse(await input.files[0].text());if(data.version!==3||!Array.isArray(data.staff)||!Array.isArray(data.assignments)||!Array.isArray(data.templates)||!validDate(data.periodStart)||!validDate(data.periodEnd)||!data.staff.every(x=>typeof x.id==='string'&&typeof x.name==='string')||!data.assignments.every(x=>validDate(x.date)&&typeof x.start==='string'&&typeof x.end==='string'))throw new Error('Archivo de respaldo incompatible.');if(!confirm('Esto reemplazará los turnos, trabajadoras y fechas actuales de este navegador. ¿Querés continuar?'))return;db={...copy(SEED),...data,history:Array.isArray(data.history)?data.history.slice(0,150):[]};localStorage.setItem(STORAGE,JSON.stringify(db));month=db.periodStart.slice(0,7);selectedDate=db.periodStart;closeModal();changed('Restauró un respaldo');notify('Respaldo restaurado correctamente.');}catch(e){notify('No se pudo restaurar: '+e.message,'error');}};input.click();}
+// No se permite restaurar JSON directamente sobre datos de producción compartidos.
+function importJSON(){notify('La importación masiva está desactivada para evitar sobrescribir datos compartidos.','error');}
 function captureCalendar(){// Renderiza el mes directo en canvas: sin dependencias, menús ni barras laterales.
  try{const [y,m]=month.split('-').map(Number),pad=(new Date(y,m-1,1).getDay()+6)%7,days=new Date(y,m,0).getDate(),cells=Math.ceil((days+pad)/7)*7,rows=cells/7;
  const W=1850,margin=62,col=(W-margin*2)/7,header=168,weekH=48,rowH=202,H=header+weekH+rows*rowH+80;
@@ -565,7 +313,7 @@ document.addEventListener('click',e=>{
  if(e.target?.id==='mobile-scrim'){mobileMenu=false;render();return;}
  if(e.target?.id==='modal-overlay'){closeModal();return;}
  if(e.target.closest('#menu-toggle')){mobileMenu=!mobileMenu;render();return;}
- const navEl=e.target.closest('[data-nav]');if(navEl){tab=navEl.dataset.nav;mobileMenu=false;render();return;}
+ const navEl=e.target.closest('[data-nav]');if(navEl){tab=admin()?navEl.dataset.nav:'calendar';mobileMenu=false;render();return;}
  const actionEl=e.target.closest('[data-action]');if(actionEl){e.preventDefault();perform(actionEl.dataset.action,actionEl);return;}
  const dateEl=e.target.closest('[data-date].day');if(dateEl)selectDay(dateEl.dataset.date);
 });
@@ -578,6 +326,6 @@ document.addEventListener('change',e=>{
 let searchDelay;document.addEventListener('input',e=>{if(e.target.id==='shift-search'){filterText=e.target.value;clearTimeout(searchDelay);searchDelay=setTimeout(()=>{const focus=$('#shift-search'),pos=focus?.selectionStart??filterText.length;render();const next=$('#shift-search');next?.focus();next?.setSelectionRange(pos,pos);},180);}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modal-root .overlay'))closeModal();if(e.target.id==='shift-search'&&e.key==='Enter'){e.preventDefault();render();}});
 document.addEventListener('submit',e=>{const form=e.target;if(!form?.id)return;e.preventDefault();if(!['login-form'].includes(form.id)&&!admin())return notify('Ingresá como administrador.','error');const cb={'shift-form':saveShift,'staff-form':saveStaff,'period-form':savePeriod,'template-form':saveTemplate,'account-form':saveAccount,'login-form':loginSubmit}[form.id];if(cb)cb(form);});
-window.addEventListener('storage',e=>{if(e.key===STORAGE){db=readDB();render();notify('El almanaque se actualizó en otra pestaña.');}if(e.key===ACCOUNT_STORAGE){accounts=readAccounts();render();}});
-if(session&&!accounts.some(a=>a.id===session.id&&a.active!==false))session=null;
+render();
+void startCloud();
 render();

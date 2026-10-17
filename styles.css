@@ -62,3 +62,9 @@ h1{font-size:clamp(23px,2.35vw,33px);font-weight:825;letter-spacing:-1px;line-he
 .day-access-hint{border:1px solid #eadfe5;background:#fcf9fb;color:#655662;font-size:12px;line-height:1.5;padding:12px 14px;border-radius:11px;display:flex;gap:10px;align-items:flex-start;margin-top:15px}
 .day-access-hint svg{flex-shrink:0;width:17px;height:17px;color:var(--berry)}
 @media(max-width:500px){.shift-entry{flex-wrap:wrap;align-items:flex-start}.shift-controls{width:100%;padding-left:42px;flex-direction:row;justify-content:flex-end}.shift-controls .btn{flex:1}.modal-actions .btn{min-width:0}}
+
+/* Estado de conexión al calendario compartido */
+.cloud-loading{min-height:100vh;display:grid;place-items:center;background:#faf8f9;padding:24px;}
+.cloud-card{background:white;border:1px solid #eee3e8;border-radius:18px;padding:34px;max-width:520px;text-align:center;box-shadow:0 14px 38px #37253310;}
+.cloud-card h1{font-size:23px;margin:0 0 16px;}
+.cloud-card p{line-height:1.6;color:#6e6370;}
